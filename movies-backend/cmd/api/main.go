@@ -19,9 +19,9 @@ func main() {
 
 	//connect to database
 	log.Println("Starting application on Port", port)
-	http.HandleFunc("/", Hello)
+	// http.HandleFunc("/", Hello)
 	//start web server
-	err:= http.ListenAndServe(fmt.Sprintf("%d", port), app.routes())
+	err:= http.ListenAndServe(fmt.Sprintf(":%d", port), app.routes())
 	if err !=nil{
 		log.Fatal(err)
 	}
