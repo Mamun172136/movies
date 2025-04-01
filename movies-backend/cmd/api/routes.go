@@ -12,5 +12,6 @@ func (app *application) routes() http.Handler {
 	mux.Use(middleware.Recoverer)
 	mux.Get("/",app.Home)
 	mux.Post("/authenticate", app.authenticate)
+	mux.Get("/refresh", app.refreshToken)
 	return mux
 }
