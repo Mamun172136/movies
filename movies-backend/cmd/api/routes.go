@@ -24,6 +24,7 @@ func (app *application) routes() http.Handler {
 		mux.Get("/movies/{id}", app.MovieForEdit)
 		mux.Put("/movies/0", app.InsertMovie)
 		mux.Get("/movies", app.MovieCatalog)
+		mux.Patch("/movies/{id}", app.UpdateMovie)
 	})
 	return mux
 }
