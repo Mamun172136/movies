@@ -20,6 +20,7 @@ type application struct {
 	JWTIssuer    string
 	JWTAudience  string
 	CookieDomain string
+	APIKey	string
 }
 
 func main() {
