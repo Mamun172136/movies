@@ -181,8 +181,61 @@ func (app *application) MovieCatalog(w http.ResponseWriter, r *http.Request) {
 	_ = app.writeJSON(w, http.StatusOK, movies)
 }
 
+// func (app *application) GetMovie(w http.ResponseWriter, r *http.Request) {
+
+
+// 	id := chi.URLParam(r, "id")
+	
+// 	// Method 2: Direct context access
+// 	rctx := chi.RouteContext(r.Context())
+// 	if rctx != nil {
+// 		log.Printf("Handler route params: %+v", rctx.URLParams)
+// 	}
+
+// 	log.Printf("Handling movie ID: %s", id)
+	
+// 	if id == "" {
+// 		app.errorJSON(w, errors.New("movie ID not found in URL parameters"))
+// 		return
+// 	}
+
+
+
+// 	// id := chi.URLParam(r, "id")
+// 	fmt.Printf("Received ID: '%s'\n", id) // Add this line to debug
+// 	log.Printf("Request path: %s", r.URL.Path)
+// 	log.Printf("----Handler context: %+v", chi.RouteContext(r.Context()))
+// 	movieID, err := strconv.Atoi(id)
+// 	if err != nil {
+// 		app.errorJSON(w, err)
+// 		return
+// 	}
+
+// 	movie, err := app.DB.OneMovie(movieID)
+// 	if err != nil {
+// 		app.errorJSON(w, err)
+// 		return
+// 	}
+
+// 	_ = app.writeJSON(w, http.StatusOK, movie)
+// }
+
 func (app *application) GetMovie(w http.ResponseWriter, r *http.Request) {
-	id := chi.URLParam(r, "id")
+	// First try to get ID from URL path (e.g., /movies/1)
+    id := chi.URLParam(r, "id")
+    
+    // If empty, check query params (e.g., /movies?id=1)
+    if id == "" {
+        id = r.URL.Query().Get("id")
+    }
+    
+    if id == "" {
+        app.errorJSON(w, errors.New("movie ID is required"))
+        return
+    }
+
+	
+
 	movieID, err := strconv.Atoi(id)
 	if err != nil {
 		app.errorJSON(w, err)
@@ -199,7 +252,18 @@ func (app *application) GetMovie(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) MovieForEdit(w http.ResponseWriter, r *http.Request) {
-	id := chi.URLParam(r, "id")
+// First try to get ID from URL path (e.g., /movies/1)
+id := chi.URLParam(r, "id")
+    
+// If empty, check query params (e.g., /movies?id=1)
+if id == "" {
+	id = r.URL.Query().Get("id")
+}
+
+if id == "" {
+	app.errorJSON(w, errors.New("movie ID is required"))
+	return
+}
 	movieID, err := strconv.Atoi(id)
 	if err != nil {
 		app.errorJSON(w, err)
@@ -360,13 +424,26 @@ func (app *application) UpdateMovie(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) DeleteMovie(w http.ResponseWriter, r *http.Request) {
-	id, err := strconv.Atoi(chi.URLParam(r, "id"))
+	// First try to get ID from URL path (e.g., /movies/1)
+id := chi.URLParam(r, "id")
+    
+// If empty, check query params (e.g., /movies?id=1)
+if id == "" {
+	id = r.URL.Query().Get("id")
+}
+
+if id == "" {
+	app.errorJSON(w, errors.New("movie ID is required"))
+	return
+}
+	
+	mid, err := strconv.Atoi(id)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
 	}
 
-	err = app.DB.DeleteMovie(id)
+	err = app.DB.DeleteMovie(mid)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -381,13 +458,27 @@ func (app *application) DeleteMovie(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) AllMoviesByGenre(w http.ResponseWriter, r *http.Request) {
-	id, err := strconv.Atoi(chi.URLParam(r, "id"))
+	// First try to get ID from URL path (e.g., /movies/1)
+id := chi.URLParam(r, "id")
+    
+// If empty, check query params (e.g., /movies?id=1)
+if id == "" {
+	id = r.URL.Query().Get("id")
+}
+
+if id == "" {
+	app.errorJSON(w, errors.New("movie ID is required"))
+	return
+}
+log.Println("GENRE ID:", id)
+	
+	mid, err := strconv.Atoi(id)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
 	}
 
-	movies, err := app.DB.AllMovies(id)
+	movies, err := app.DB.AllMovies(mid)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
