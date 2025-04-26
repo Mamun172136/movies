@@ -1,54 +1,112 @@
-# Go Project
+# Go Movies Backend API
 
-This is a Go project that can be compiled and executed locally using the `go build` command. It does not require Docker or installing Go globally on your system.
+A backend API for managing movies, built with Go, PostgreSQL, and JWT authentication.
 
-## Prerequisites
+## Features
 
-Before you begin, make sure that you have Go installed on your machine.
+- JWT authentication with refresh tokens
+- CRUD operations for movies
+- Genre management
+- Movie poster fetching from TheMovieDB API
+- PostgreSQL database
+- RESTful API design
 
-1. **Install Go**:  
-   Download and install Go from the official website: [Go Downloads](https://golang.org/dl/)
+## Technologies
 
-2. **Verify Go installation**:  
-   After installing Go, verify the installation by running the following command in your terminal and make sure that you have **Go 1.23.4** (or a compatible version) installed on your machine.:
+- Go 1.23.4
+- PostgreSQL
+- JWT for authentication
+- Chi router
+- Docker (for PostgreSQL)
 
+## Setup
+
+### Prerequisites
+
+- Go 1.23.4 or later
+- Docker (for running PostgreSQL)
+
+### Installation
+
+1. Clone the repository:
    ```bash
-   go version
-   git clone <https://github.com/Mamun172136/movies.gitt>
-   cd <project-directory>/movies-backend
-   go get -u
+   git clone https://github.com/yourusername/go-movies-backend.git
+   cd go-movies-backend
+   docker-compose up -d
    go run ./cmd/api
 
 
-# Movies API
+# 🎬 Go Movies API Documentation
+`http://localhost:8000/`
+## 🔑 Authentication
 
-## API Endpoints
+### Login / Register User
+`POST /authenticate`
 
-### Authentication
+**Request Body:**
+```json
+{
+  "email": "test@example.com",
+  "password": "test123"
+}
+Success Response (200):
 
-- **POST /authenticate**: Authenticate a user and get a token.
-- **POST /signup**: Register a new user.
-- **POST /login**: Authenticate a user and get a token.
-- **GET /refresh**: Refresh the authentication token.
-- **GET /logout**: Logout the user.
+json
+{
+  "access_token": "eyJhbGciOiJIUz...",
+  "refresh_token": "eyJhbGciOiJIUz..."
+}
+Sets HTTP-only cookie: refresh_token=eyJhbGci...
+
+Refresh Access Token
+GET /refresh
+
+Requires Cookie:
+refresh_token=eyJhbGci... (from login)
+
+Success Response (200):
+
+json
+{
+  "access_token": "eyJhbGciOiJIUz..."
+}
+Logout
+GET /logout
+
+Success Response (202):
+(Empty body, clears refresh token cookie)
 
 ### Movies
-
 - **GET /movies**: Retrieve a list of all movies.
-- **GET /movies/{id}**: Retrieve details of a specific movie by ID.
-- **POST /movies**: Add a new movie (Admin only).
-- **PUT /movies/{id}**: Update details of a specific movie by ID (Admin only).
-- **DELETE /movies/{id}**: Delete a specific movie by ID (Admin only).
+Get All Movies
+[
+    {
+        "id": 1,
+        "title": "HighlandeR",
+        "release_date": "0001-01-01T00:00:00Z",
+        "runtime": 0,
+        "mpaa_rating": "",
+        "description": "",
+        "image": "/8Z8dptJEypuLoOQro1WugD855YE.jpg"
+    }
+]
 
+Success Response (200):
+- **GET /movies/?id=1**: Retrieve details of a specific movie by ID.
 ### Genres
 
 - **GET /genres**: Retrieve a list of all movie genres.
-- **GET /movies/genres/{id}**: Retrieve all movies belonging to a specific genre.
+- **GET /movies/genres/?id=11**: Retrieve all movies belonging to a specific genre.
 
 ### Admin Routes (Requires Authentication)
-
+- **Authorization: Bearer eyJhbGci...
 - **GET /admin/movies**: Retrieve all movies (Admin only).
-- **GET /admin/movies/{id}**: Retrieve movie details for editing (Admin only).
-- **PUT /admin/movies/0**: Insert a new movie (Admin only).
-- **PATCH /admin/movies/{id}**: Update movie details (Admin only).
-- **DELETE /admin/movies/{id}**: Delete a movie (Admin only).
+- **GET /admin/movies/?id=1**: Retrieve movie details for editing (Admin only).
+- **PUT /admin/movie**: Insert a new movie (Admin only).
+- **PATCH /admin/movie**: Update movie details (Admin only).
+{
+    "ID": 1,
+  "title": "HighlandeRR"
+  
+}
+- **DELETE /admin/movies/?id=2**: Delete a movie (Admin only).
