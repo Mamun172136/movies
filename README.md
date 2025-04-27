@@ -30,7 +30,7 @@ A backend API for managing movies, built with Go, PostgreSQL, and JWT authentica
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/go-movies-backend.git
+   git clone https://github.com/Mamun172136/movies.git
    cd go-movies-backend
    docker-compose up -d
    go run ./cmd/api
