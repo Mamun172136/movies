@@ -9,6 +9,8 @@ import (
 	"net/http"
 	"os"
 	"time"
+
+	"github.com/joho/godotenv"
 )
 
 
@@ -24,6 +26,10 @@ type application struct {
 }
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 	// set application config
 	var app application
 
@@ -57,6 +63,8 @@ func main() {
 		CookieName: "refresh_token",
 		CookieDomain: app.CookieDomain,
 	}
+	
+
 	port := os.Getenv("PORT")
     if port == "" {
         port = "8000"
