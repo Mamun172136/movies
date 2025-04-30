@@ -46,8 +46,8 @@ A backend API for managing movies, built with Go, PostgreSQL, and JWT authentica
 **Request Body:**
 ```json
 {
-  "email": "test@example.com",
-  "password": "test123"
+  "email": "admin1@example.com",
+  "password":"test1234"
 }
 Success Response (200):
 
