@@ -35,9 +35,15 @@ func main() {
 	//read from command line
 	// flag.StringVar(&app.DSN, "dsn", "host=localhost port=5432 user=postgres password=postgres dbname=movies sslmode=disable timezone=UTC connect_timeout=5", "Postgres connection string")
 	// flag.StringVar(&app.DSN, "dsn", "postgresql://postgres:JwcgamlQaDuEPPatzVzijvuVEAJtUHdf@containers-us-west-45.railway.app:5432/railway", "Postgres connection string")
-	flag.StringVar(&app.DSN, "dsn", 
-    "postgresql://postgres:JwcgamlQaDuEPPatzVzijvuVEAJtUHdf@containers-us-west-45.railway.app:5432/railway?sslmode=require", 
-    "Postgres connection string")
+	// flag.StringVar(&app.DSN, "dsn", 
+    // "postgresql://postgres:JwcgamlQaDuEPPatzVzijvuVEAJtUHdf@containers-us-west-45.railway.app:5432/railway?sslmode=require", 
+    // "Postgres connection string")
+dsn := os.Getenv("DATABASE_URL") // Railway automatically provides this
+if dsn == "" {
+    // Fallback for local development
+    dsn = "host=localhost port=5432 user=postgres password=postgres dbname=movies sslmode=disable timezone=UTC connect_timeout=5"
+}
+    flag.StringVar(&app.DSN, "dsn", dsn, "Postgres connection string")
 	flag.StringVar(&app.JWTSecret, "jwt-secret", "verysecret", "signing secret")
 	flag.StringVar(&app.JWTIssuer, "jwt-issuer", "example.com", "signing issuer")
 	flag.StringVar(&app.JWTAudience, "jwt-audience", "example.com", "signing audience")
