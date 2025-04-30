@@ -7,10 +7,10 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
 )
 
-const port = 8000
 
 type application struct {
 	DSN string
@@ -29,7 +29,10 @@ func main() {
 
 	//read from command line
 	// flag.StringVar(&app.DSN, "dsn", "host=localhost port=5432 user=postgres password=postgres dbname=movies sslmode=disable timezone=UTC connect_timeout=5", "Postgres connection string")
-	flag.StringVar(&app.DSN, "dsn", "postgresql://postgres:JwcgamlQaDuEPPatzVzijvuVEAJtUHdf@containers-us-west-45.railway.app:5432/railway", "Postgres connection string")
+	// flag.StringVar(&app.DSN, "dsn", "postgresql://postgres:JwcgamlQaDuEPPatzVzijvuVEAJtUHdf@containers-us-west-45.railway.app:5432/railway", "Postgres connection string")
+	flag.StringVar(&app.DSN, "dsn", 
+    "postgresql://postgres:JwcgamlQaDuEPPatzVzijvuVEAJtUHdf@containers-us-west-45.railway.app:5432/railway?sslmode=require", 
+    "Postgres connection string")
 	flag.StringVar(&app.JWTSecret, "jwt-secret", "verysecret", "signing secret")
 	flag.StringVar(&app.JWTIssuer, "jwt-issuer", "example.com", "signing issuer")
 	flag.StringVar(&app.JWTAudience, "jwt-audience", "example.com", "signing audience")
@@ -54,10 +57,15 @@ func main() {
 		CookieName: "refresh_token",
 		CookieDomain: app.CookieDomain,
 	}
+	port := os.Getenv("PORT")
+    if port == "" {
+        port = "8000"
+    }
+
 	log.Println("Starting application on Port", port)
 	// http.HandleFunc("/", Hello)
 	//start web server
-	err = http.ListenAndServe(fmt.Sprintf(":%d", port), app.routes())
+	err = http.ListenAndServe(fmt.Sprintf(":%s", port), app.routes())
 	if err !=nil{
 		log.Fatal(err)
 	}
