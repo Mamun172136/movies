@@ -103,6 +103,14 @@ Success Response (200):
 - **GET /admin/movies**: Retrieve all movies (Admin only).
 - **GET /admin/movies/?id=1**: Retrieve movie details for editing (Admin only).
 - **PUT /admin/movie**: Insert a new movie (Admin only).
+{
+  "title": "Inception",
+  "description": "A thief who steals corporate secrets...",
+  "release_date": "2010-07-16T00:00:00Z",  // RFC3339 format
+  "runtime": 148,
+  "mpaa_rating": "PG-13"
+ 
+}
 - **PATCH /admin/movie**: Update movie details (Admin only).
 {
     "ID": 1,
